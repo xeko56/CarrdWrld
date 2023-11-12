@@ -64,7 +64,12 @@ function initProductTable() {
                         '</div>'
                 }
             },
-            { data: "card_name", sClass: "input-large dt-head-left dt-body-left" },
+            {
+                data: "card_name", sClass: "input-large dt-head-left dt-body-left",
+                render: function (data, type, row) {
+                    return '<a href="/">'+data+'</a>'
+                }
+            },
             { data: "exp_name", sClass: "input-large dt-head-left dt-body-left" },
             { data: "group_name", sClass: "input-large dt-head-left dt-body-left" },
             { data: "type_name", sClass: "input-large dt-head-left dt-body-left" },

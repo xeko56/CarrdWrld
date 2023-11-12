@@ -1,3 +1,7 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
 main>.container {
     padding: 70px 15px 20px;
 }
@@ -105,23 +109,6 @@ a.desc:after {
     position: relative;
 }
 
-/* .icon-wrapper .image-box {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 100%;
-    background-color: #f0f0f0;
-    padding: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    white-space: nowrap;
-    min-width: 200px;
-} */
-
-/* .icon-wrapper .image-box img {
-    max-width: 80%;
-    height: auto;
-} */
-
 .icon-wrapper .image-box {
     display: none;
     position: absolute;
@@ -137,6 +124,10 @@ a.desc:after {
     /* Hide any content that exceeds the box dimensions */
 }
 
-.card-header{
+.card-header {
     background-color: rgb(243 227 253)!important;
+}
+
+.product-img {
+    max-width: 240px;
 }

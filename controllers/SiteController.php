@@ -55,9 +55,16 @@ class SiteController extends Controller
         ];
     }
 
+    public function init()
+    {
+        parent::init();
+    
+        // Set default action based on user authentication status
+        $this->defaultAction = Yii::$app->user->isGuest ? 'login' : 'index';
+    }
+
     public function beforeAction($action)
     {
-        $this->layout = "menubar";
         return true;
     }
     /**
@@ -67,6 +74,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $this->layout = "menubar";
         $groupList = Site::get_all_data('groups', null, null);
         $groupTypeList = Site::get_all_data('group_types', null, null);
         return $this->render('index', array(
@@ -92,6 +100,7 @@ class SiteController extends Controller
         }
 
         $model->password = '';
+        $this->layout = "darkTemplate";
         return $this->render('login', [
             'model' => $model,
         ]);
