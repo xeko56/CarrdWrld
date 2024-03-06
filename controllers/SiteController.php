@@ -10,6 +10,10 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\Site;
+use app\models\SignupForm;
+use app\models\Cards;
+use app\models\Categories;
+use yii\data\ActiveDataProvider;
 
 class SiteController extends Controller
 {
@@ -77,9 +81,21 @@ class SiteController extends Controller
         $this->layout = "menubar";
         $groupList = Site::get_all_data('groups', null, null);
         $groupTypeList = Site::get_all_data('group_types', null, null);
+        $categories = Categories::find()->all();
+        $data = Cards::getCardsTable();
+        $dataProvider = new ActiveDataProvider([
+            'query' => Cards::find()->leftJoin('groups', 'cards.group_nr = groups.group_nr')
+                                    ->leftJoin('expansion', 'cards.exp_nr = expansion.exp_nr')
+                                    ->leftJoin('card_types', 'cards.type_nr = card_types.type_nr')
+                                    ->orderBy('cards.card_nr ASC'),
+        ]);
+
         return $this->render('index', array(
             'groupList' => $groupList,
-            'groupTypeList' => $groupTypeList
+            'groupTypeList' => $groupTypeList,
+            'categories' => $categories,
+            'data' => $data,
+            'dataProvider' => $dataProvider
         ));
     }
 
@@ -117,6 +133,86 @@ class SiteController extends Controller
 
         return $this->goHome();
     }
+
+    public function actionSignup()
+    {
+        $model = new SignupForm();
+        if ($model->load(Yii::$app->request->post()) && $model->signup()) {
+            Yii::$app->session->setFlash('success', 'Registration successful! Please login.');
+            return $this->redirect(['login']);
+        }
+        $this->layout = "darkTemplate";
+        return $this->render('signup', [
+            'model' => $model,
+        ]);
+    }
+    
+    public function actionGetTrendingTable()
+    {
+        $data = Cards::getCardsTable();
+        $aColumns = array('card_name, exp_name, group_name, type_name, release_date');
+        $sLimit = "";
+
+        if (isset($_POST['start']) && $_POST['length'] != '-1') {
+            $sLimit = "LIMIT " . intval($_POST['length']) . " OFFSET " .
+                intval($_POST['start']);
+        }
+        /*
+         * Ordering
+         */
+        if (isset($_POST['order'])) {
+            $isfiltered = 0;
+            $sOrder = "ORDER BY  ";
+            for ($i = 0; $i < intval($_POST['order']); $i++) {
+                if ($_POST['columns'][$i]['orderable'] == "true") {
+                    $_POST['order'][$i]['column'] = ($_POST['order'][$i]['column'] == 0 ? $_POST['order'][$i]['column'] : ($_POST['order'][$i]['column']));
+                    $sOrder .= $aColumns[intval($_POST['order'][$i]['column'])] . " " . ($_POST['order'][$i]['dir'] === 'asc' ? 'asc' : 'desc') . ", ";
+                }
+            }
+
+            $sOrder = substr_replace($sOrder, "", -2);
+            if ($sOrder == "ORDER BY") {
+                $sOrder = "";
+            }
+        }
+        $sWhere = "1=1 ";
+        /* Individual column filtering */
+        if (isset($_POST['search']['value']) && !empty($_POST['search']['value'])) {
+            $sWhere .= "and (card_name ILIKE '%" . pg_escape_string($_POST['search']['value']) . "%')
+                or exp_name ILIKE '%" . pg_escape_string($_POST['search']['value']) . "%'
+                or group_name ILIKE '%" . pg_escape_string($_POST['search']['value']) . "%'
+                or type_name ILIKE '%" . pg_escape_string($_POST['search']['value']) . "%')";
+        }
+        $iTotal = $iFilteredTotal = count($data);
+        $sql = "SELECT card_nr, card_name, exp_name, group_name, type_name, release_date, img_url FROM cards
+        LEFT JOIN groups USING (group_nr)
+        LEFT JOIN expansion USING (exp_nr)
+        LEFT JOIN card_types USING (type_nr) order by card_nr asc $sLimit";
+        $command = Yii::$app->db->createCommand($sql);
+        $result = $command->queryAll();
+
+        $output = array(
+            "draw" => intval($_GET['draw']),
+            "recordsTotal" => $iTotal,
+            "isfiltered" => $isfiltered,
+            "recordsFiltered" => $iFilteredTotal,
+            "data" => $result,
+        );
+        echo json_encode($output);
+        exit();       
+    }
+
+    public function actionCategories($category_nr)
+    {
+        $this->layout = "menubar";
+        // Fetch cards for the specified category_id
+        $cards = Cards::getCardsTable("category_nr = {$category_nr}");;
+
+        // Render the view with the cards
+        return $this->render('categories', [
+            'cards' => $cards,
+        ]);
+    }    
 
     /**
      * Displays contact page.

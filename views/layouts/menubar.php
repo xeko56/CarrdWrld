@@ -11,8 +11,11 @@ use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
 use app\models\Site;
 use Yii\helpers\Url;
+use yii\grid\GridViewAsset;
 
 AppAsset::register($this);
+
+GridViewAsset::register($this);
 
 $this->registerCsrfMetaTags();
 $this->registerMetaTag(['charset' => Yii::$app->charset], 'charset');
@@ -39,17 +42,14 @@ foreach ($groupTypeList as $groupType) {
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>" class="h-full bg-gray-800">
+<html lang="<?= Yii::$app->language ?>">
 
 <head>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 
     <!-- <link href="<?php echo Url::base(); ?>/css/main.css?version=<?php echo date('d.m.Y-H-i'); ?>" rel="stylesheet" type="text/css"> -->
-    <link href="<?php echo Url::base(); ?>/assets/DataTables/datatables.min.css" rel="stylesheet">
-    <link href="<?php echo Url::base(); ?>/fontawesome/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
+    <link href="https://cdn.jsdelivr.net/npm/gridjs@6.2.0/dist/theme/mermaid.min.css" rel="stylesheet">
     <!-- END GLOBAL MANDATORY STYLES -->
 
     <!-- END PAGE LEVEL STYLES -->
@@ -78,7 +78,8 @@ foreach ($groupTypeList as $groupType) {
                     </div>
                     <div class="hidden md:block">
                         <div class="ml-4 flex items-center md:ml-6">
-                            <button type="button" class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                            <button type="button" class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none 
+                                            focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                                 <span class="absolute -inset-1.5"></span>
                                 <span class="sr-only">View notifications</span>
                                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
@@ -96,7 +97,8 @@ foreach ($groupTypeList as $groupType) {
                                     </button>
                                 </div>
 
-                                <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+                                <div class="user-dropdown absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md 
+                                            bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
                                     <!-- Active: "bg-gray-100", Not Active: "" -->
                                     <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
                                     <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
@@ -159,23 +161,44 @@ foreach ($groupTypeList as $groupType) {
             </div>
         </nav>
 
+        <section class="hero-section bg-transparent relative">
+            <div class="flex items-center justify-center h-screen">
+                <div class="text-center">
+                    <h1 class="text-8xl mb-4 font-semibold font-mono text-slate-950 sm:text-10xl tracking-tight">
+                        Welcome to <br> <span class="text-white bg-gradient-to-tr from-violet-800 to-violet-400 rounded-2xl px-4">Carrd Wrld</span>
+                    </h1>
+                    <p class="text-lg my-8 text-slate-800">You can't emerge victorious in the game <br> unless you possess the very soul of the cards.</p>
+                    <a href="#" class="bg-violet-700 text-white px-6 py-3 rounded-full hover:bg-violet-600 transition duration-300">Learn More</a>
+                </div>
+            </div>
+            <div class="m-auto">
+                <div id="3d-container" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -z-10"></div>
+            </div>
+        </section>
+
         <?= $content ?>
 
         <footer id="footer" class="mt-auto py-3 bg-light">
-            <div class="container">
+            <div class="">
                 <div class="row text-muted">
-                    <div class="col-md-6 text-center text-md-start">&copy; My Company <?= date('Y') ?></div>
-                    <div class="col-md-6 text-center text-md-end"><?= Yii::powered() ?></div>
+                    <div class="text-center mx-auto">&copy; Carrd Wrld <?= date('Y') ?></div>
                 </div>
             </div>
         </footer>
     </div>
     <?php $this->endBody() ?>
-        <script src="<?php echo Url::base(); ?>/assets/DataTables/datatables.min.js"></script>
-        <script src="<?php echo Url::base(); ?>/js/site.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
+    <script type="importmap">
+        {
+				"imports": {
+					"three": "./assets/three/three.module.js",
+					"three/addons/": "./assets/three/examples/jsm/"
+				}
+			}
+		</script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/gridjs@6.2.0/dist/gridjs.production.min.js"></script>
+    <script type="module" src="<?php echo Url::base(); ?>/js/site.js"></script>
+    <script type="module" src='<?php echo Url::base(); ?>/js/hero3d.js'></script>
 </body>
 
 </html>

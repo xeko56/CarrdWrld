@@ -8,16 +8,15 @@ use yii\web\IdentityInterface;
 class User extends ActiveRecord implements IdentityInterface
 {
     // public $id;
+    // public $username;
+    // public $email;
+    // public $password_hash;
     // public $firstname;
     // public $lastname;
-    // public $email;
-    // public $username;
-    // public $password_hash;
     // public $user_role;
     // public $created_at;
     // public $authKey;
     // public $accessToken;
-
     // private static $users = [
     //     '100' => [
     //         'id' => '100',
@@ -97,8 +96,30 @@ class User extends ActiveRecord implements IdentityInterface
      * @param string $password password to validate
      * @return bool if password provided is valid for current user
      */
-    public function validatePassword($password_hash)
+    public function validatePassword($password)
     {
-        return $this->password_hash === $password_hash;
+        return \Yii::$app->security->validatePassword($password, $this->password);
     }
+
+    public function setPassword($password)
+    {
+        $this->password =\Yii::$app->security->generatePasswordHash($password);
+    }    
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            // If a new password is set or the record is new, hash and set the password
+            // if ($this->isNewRecord || $this->isAttributeChanged('password')) {
+            //     $this->setPassword($this->password);
+            // }
+            if ($this->isNewRecord) {
+                $this->created_at = date('Y-m-d H:i:s');
+            }
+            return true;
+        }
+
+        return false;
+    }
+
 }
