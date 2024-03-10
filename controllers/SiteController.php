@@ -242,6 +242,16 @@ class SiteController extends Controller
         return $this->render('about');
     }
 
+    /**
+     * Displays faq page.
+     *
+     * @return string
+     */
+    public function actionFaq()
+    {
+        return $this->render('faq');
+    }    
+
     public function actionGetProductTable()
     {
         $intLimit = $_REQUEST['length'];
