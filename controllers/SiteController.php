@@ -11,7 +11,7 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\Site;
 use app\models\SignupForm;
-use app\models\Cards;
+use app\models\Card;
 use app\models\Categories;
 use yii\data\ActiveDataProvider;
 
@@ -82,9 +82,9 @@ class SiteController extends Controller
         $groupList = Site::get_all_data('groups', null, null);
         $groupTypeList = Site::get_all_data('group_types', null, null);
         $categories = Categories::find()->all();
-        $data = Cards::getCardsTable();
+        $data = Card::getCardsTable();
         $dataProvider = new ActiveDataProvider([
-            'query' => Cards::find()->leftJoin('groups', 'cards.group_nr = groups.group_nr')
+            'query' => Card::find()->leftJoin('groups', 'cards.group_nr = groups.group_nr')
                                     ->leftJoin('expansion', 'cards.exp_nr = expansion.exp_nr')
                                     ->leftJoin('card_types', 'cards.type_nr = card_types.type_nr')
                                     ->orderBy('cards.card_nr ASC'),
@@ -116,7 +116,7 @@ class SiteController extends Controller
         }
 
         $model->password = '';
-        $this->layout = "darkTemplate";
+        $this->layout = 'landing';
         return $this->render('login', [
             'model' => $model,
         ]);
@@ -141,7 +141,6 @@ class SiteController extends Controller
             Yii::$app->session->setFlash('success', 'Registration successful! Please login.');
             return $this->redirect(['login']);
         }
-        $this->layout = "darkTemplate";
         return $this->render('signup', [
             'model' => $model,
         ]);
@@ -149,7 +148,7 @@ class SiteController extends Controller
     
     public function actionGetTrendingTable()
     {
-        $data = Cards::getCardsTable();
+        $data = Card::getCardsTable();
         $aColumns = array('card_name, exp_name, group_name, type_name, release_date');
         $sLimit = "";
 
@@ -206,13 +205,25 @@ class SiteController extends Controller
     {
         $this->layout = "menubar";
         // Fetch cards for the specified category_id
-        $cards = Cards::getCardsTable("category_nr = {$category_nr}");;
+        $cards = Card::getCardsTable("category_nr = {$category_nr}");;
 
         // Render the view with the cards
         return $this->render('categories', [
             'cards' => $cards,
         ]);
-    }    
+    }
+    
+    public function actionCard($card_nr)
+    {
+        $js = Yii::getAlias('@web/js/card.js?cb='. uniqid());
+        $this->getView()->registerJsFile($js, ['type' => 'module']);
+        $cards = Card::getCardsTable("card_nr = {$card_nr}");;
+
+        // Render the view with the cards
+        return $this->render('card', [
+            'cards' => $cards,
+        ]);
+    } 
 
     /**
      * Displays contact page.

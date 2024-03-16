@@ -71,57 +71,11 @@ foreach ($groupTypeList as $groupType) {
 
 </head>
 
-<body class="d-flex flex-column h-100">
+<body id="kt_body" class="app-blank">>
     <?php $this->beginBody() ?>
-    <div class="min-vh-100">
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">
-                    <img src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="" width="30" height="24">
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Categories</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">About</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Contact</a>
-                        </li>
-                    </ul>
-                    <div class="d-flex align-items-center">
-                        <button class="btn btn-outline-secondary me-2" type="button">
-                            <span class="sr-only">View notifications</span>
-                            <!-- SVG Icon adjusted for Bootstrap -->
-                        </button>
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                User
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                                <li><a class="dropdown-item" href="#">Your Profile</a></li>
-                                <li><a class="dropdown-item" href="#">Settings</a></li>
-                                <li><a class="dropdown-item" href="<?= Yii::$app->urlManager->createUrl(['site/logout']) ?>">Sign out</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
 
         <?= $content ?>
 
-        <!-- Footer conversion goes here, following similar patterns of class replacements and structural adjustments as needed. -->
-
-    </div>
     <?php $this->endBody() ?>
     <script type="importmap">
         {

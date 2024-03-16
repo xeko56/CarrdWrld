@@ -14,13 +14,15 @@ use Yii;
  * @property int|null $type_nr
  * @property string $release_date
  * @property string|null $img_url
+ * @property int|null $category_nr
  *
+ * @property Categories $categoryNr
  * @property Expansion $expNr
  * @property Groups $groupNr
  * @property SaleCards[] $saleCards
  * @property CardTypes $typeNr
  */
-class Cards extends \yii\db\ActiveRecord
+class Card extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -37,9 +39,10 @@ class Cards extends \yii\db\ActiveRecord
     {
         return [
             [['card_name', 'release_date'], 'required'],
-            [['exp_nr', 'group_nr', 'type_nr'], 'integer'],
+            [['exp_nr', 'group_nr', 'type_nr', 'category_nr'], 'integer'],
             [['release_date'], 'safe'],
             [['card_name', 'img_url'], 'string', 'max' => 255],
+            [['category_nr'], 'exist', 'skipOnError' => true, 'targetClass' => Categories::class, 'targetAttribute' => ['category_nr' => 'category_nr']],
             [['exp_nr'], 'exist', 'skipOnError' => true, 'targetClass' => Expansion::class, 'targetAttribute' => ['exp_nr' => 'exp_nr']],
             [['group_nr'], 'exist', 'skipOnError' => true, 'targetClass' => Groups::class, 'targetAttribute' => ['group_nr' => 'group_nr']],
             [['type_nr'], 'exist', 'skipOnError' => true, 'targetClass' => CardTypes::class, 'targetAttribute' => ['type_nr' => 'type_nr']],
@@ -52,14 +55,25 @@ class Cards extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'card_nr' => 'Card Nr',
-            'card_name' => 'Card Name',
-            'exp_nr' => 'Exp Nr',
-            'group_nr' => 'Group Nr',
-            'type_nr' => 'Type Nr',
-            'release_date' => 'Release Date',
-            'img_url' => 'Img Url',
+            'card_nr' => Yii::t('app', 'Card Nr'),
+            'card_name' => Yii::t('app', 'Card Name'),
+            'exp_nr' => Yii::t('app', 'Exp Nr'),
+            'group_nr' => Yii::t('app', 'Group Nr'),
+            'type_nr' => Yii::t('app', 'Type Nr'),
+            'release_date' => Yii::t('app', 'Release Date'),
+            'img_url' => Yii::t('app', 'Img Url'),
+            'category_nr' => Yii::t('app', 'Category Nr'),
         ];
+    }
+
+    /**
+     * Gets query for [[CategoryNr]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCategoryNr()
+    {
+        return $this->hasOne(Categories::class, ['category_nr' => 'category_nr']);
     }
 
     /**
