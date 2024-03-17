@@ -11,11 +11,9 @@ use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
 use app\models\Site;
 use Yii\helpers\Url;
-use yii\grid\GridViewAsset;
 
 AppAsset::register($this);
 
-GridViewAsset::register($this);
 
 $this->registerCsrfMetaTags();
 $this->registerMetaTag(['charset' => Yii::$app->charset], 'charset');
@@ -123,15 +121,7 @@ foreach ($groupTypeList as $groupType) {
 
     </div>
     <?php $this->endBody() ?>
-    <script type="importmap">
-        {
-        "imports": {
-            "three": "./assets/three/three.module.js",
-            "three/addons/": "./assets/three/examples/jsm/"
-        }
-	}
-	</script>
-    <script src="https://cdn.jsdelivr.net/npm/gridjs@6.2.0/dist/gridjs.production.min.js"></script>
+
     <!--begin::Javascript-->
     <!--begin::Global Javascript Bundle(mandatory for all pages)-->
     <script src="<?php echo Url::base(); ?>/assets/oswald/assets/plugins/global/plugins.bundle.js"></script>
@@ -144,12 +134,12 @@ foreach ($groupTypeList as $groupType) {
 
     <!--begin::Custom Javascript(used for this page only)-->
     <script src="<?php echo Url::base(); ?>/assets/oswald/assets/js/widgets.bundle.js"></script>
-    <script src="<?php echo Url::base(); ?>/assets/oswald/assets/js/custom/widgets.js"></script>
     <script src="<?php echo Url::base(); ?>/assets/oswald/assets/js/custom/apps/chat/chat.js"></script>
     <script src="<?php echo Url::base(); ?>/assets/oswald/assets/js/custom/utilities/modals/upgrade-plan.js"></script>
     <script src="<?php echo Url::base(); ?>/assets/oswald/assets/js/custom/utilities/modals/create-app.js"></script>
     <script src="<?php echo Url::base(); ?>/assets/oswald/assets/js/custom/utilities/modals/new-target.js"></script>
     <script src="<?php echo Url::base(); ?>/assets/oswald/assets/js/custom/utilities/modals/users-search.js"></script>
+    <script src="<?php echo Url::base(); ?>/assets/oswald/assets/plugins/custom/datatables/datatables.bundle.js"></script>
     <!--end::Custom Javascript-->
     <!--end::Javascript-->
 </body>

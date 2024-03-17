@@ -12,6 +12,7 @@ use app\models\ContactForm;
 use app\models\Site;
 use app\models\SignupForm;
 use app\models\Card;
+use app\models\SaleCards;
 use app\models\Categories;
 use yii\data\ActiveDataProvider;
 
@@ -203,9 +204,10 @@ class SiteController extends Controller
 
     public function actionCategories($category_nr)
     {
-        $this->layout = "menubar";
+        $js = Yii::getAlias('@web/js/category.js?cb='. uniqid());
+        $this->getView()->registerJsFile($js, ['depends' => 'yii\web\JqueryAsset']);        
         // Fetch cards for the specified category_id
-        $cards = Card::getCardsTable("category_nr = {$category_nr}");;
+        $cards = Card::getCardsTable("c.category_nr = {$category_nr}");
 
         // Render the view with the cards
         return $this->render('categories', [
@@ -217,13 +219,28 @@ class SiteController extends Controller
     {
         $js = Yii::getAlias('@web/js/card.js?cb='. uniqid());
         $this->getView()->registerJsFile($js, ['type' => 'module']);
-        $cards = Card::getCardsTable("card_nr = {$card_nr}");;
-
+        $cards = Card::getCardsTable("card_nr = {$card_nr}");
         // Render the view with the cards
         return $this->render('card', [
             'cards' => $cards,
         ]);
-    } 
+    }
+    
+    public function actionGetCategoryCards()
+    {
+        $request = Yii::$app->request;
+        $category_nr = $request->post('category_nr');
+        $cards = Categories::getCategoryCardsTable("$category_nr");
+        return $cards;        
+    }
+
+    public function actionGetSaleCards()
+    {
+        $request = Yii::$app->request;
+        $card_nr = $request->post('card_nr');
+        $saleCards = SaleCards::getSaleCardsTable($card_nr);
+        return $saleCards;
+    }
 
     /**
      * Displays contact page.

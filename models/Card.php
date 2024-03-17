@@ -118,10 +118,11 @@ class Card extends \yii\db\ActiveRecord
 
     public static function getCardsTable($query = NULL)
     {
-        $sql = "SELECT card_nr, card_name, exp_name, group_name, type_name, release_date, img_url FROM cards
+        $sql = "SELECT card_nr, card_name, exp_name, group_name, type_name, release_date, img_url, ct.category_name, ct.category_nr FROM cards c
             LEFT JOIN groups USING (group_nr)
             LEFT JOIN expansion USING (exp_nr)
-            LEFT JOIN card_types USING (type_nr)";
+            LEFT JOIN card_types USING (type_nr)
+            JOIN categories ct ON c.category_nr = ct.category_nr";
         if ($query)
         {
             $sql .= ' WHERE ' . $query;

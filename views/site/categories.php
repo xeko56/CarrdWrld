@@ -1,54 +1,79 @@
 <?php
 
 /** @var yii\web\View $this */
+
 use yii\helpers\Url;
 
 $this->title = 'Carrd Wrld';
 ?>
+<div class="container py-4">
+    <ul class="breadcrumb breadcrumb-separatorless fw-semibold my-5 my-md-6">
+
+        <!--begin::Item-->
+        <li class="breadcrumb-item text-gray-700 fw-bold lh-1">
+            <a href="/" class="text-gray-500 text-hover-primary">
+                <i class="ki-duotone ki-home fs-3 text-gray-400 me-n1"></i>
+            </a>
+        </li>
+        <!--end::Item-->
+
+        <!--begin::Item-->
+        <li class="breadcrumb-item">
+            <i class="ki-duotone ki-right fs-4 text-gray-700 mx-n1"></i>
+        </li>
+        <!--end::Item-->
 
 
+        <!--begin::Item-->
+        <li class="breadcrumb-item text-gray-500">
+            <a href="/" class="text-gray-500 text-hover-primary">
+                <?= $cards[0]['category_name'] ?>
+            </a>
+        </li>
+        <!--end::Item-->
 
-<div>
+    </ul>
+
     <?php if (count($cards) > 0) { ?>
-        <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-            <table class="border border-collapse border-gray-500 table-auto w-full">
-                <thead class="text-white">
-                    <tr class="bg-primary">
-                        <th></th>
-                        <th class="border border-gray-500">Image</th>
-                        <th class="border border-gray-500">Name</th>
-                        <th class="border border-gray-500">Expansion</th>
-                        <th class="border border-gray-500">Group</th>
-                        <th class="border border-gray-500">Type</th>
-                        <th class="border border-gray-500">Release Date</th>
-                    </tr>
-                </thead>
-                <tbody class="text-table-text">
-                    <?php foreach ($cards as $index => $card) { ?>
-                            <tr class="<?= $index % 2 === 0 ? 'bg-white' : 'bg-even' ?> text-center">
-                                <td class="border border-gray-500"><?= $card['card_nr'] ?></td>
-                                <td class="border border-gray-500">
-                                    <div class="group relative cursor-pointer flex justify-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-slate-900 group-hover:text-primary">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
-                                        </svg>
+        <div class="row gy-5 g-xl-10">
+            <!--begin::Col-->
+            <div class="col-xl-12">
 
-                                        <div class="hidden z-50 group-hover:block absolute left-12 bg-white p-2 border border-gray-300 shadow-md mx-auto items-center transition-opacity duration-300">
-                                            <img class="object-cover rounded-sm w-10" src="<?= $card['img_url'] ?>" alt="Image">
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="border border-gray-500"><?= $card['card_name'] ?></td>
-                                <td class="border border-gray-500"><?= $card['exp_name'] ?></td>
-                                <td class="border border-gray-500"><?= $card['group_name'] ?></td>
-                                <td class="border border-gray-500"><?= $card['type_name'] ?></td>
-                                <td class="border border-gray-500"><?= $card['release_date'] ?></td>
-                            </tr>
-                    <?php } ?>
-                </tbody>
-                </table>
+                <!--begin::List widget 5-->
+                <div class="card card-flush h-xl-100">
+                    <!--begin::Header-->
+                    <div class="card-header pt-7">
+                        <!--begin::Title-->
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bold text-dark"><?= $cards[0]['category_name'] ?></span>
+                            <span class="text-gray-400 mt-1 fw-semibold fs-6">1M Products shipped so far</span>
+                        </h3>
+                        <!--end::Title-->
+
+                    </div>
+                    <!--end::Header-->
+
+                    <!--begin::Body-->
+                    <div class="card-body">
+                        <input hidden id="category_nr" value="<?= $cards[0]['category_nr'] ?>">
+                        <table id="category_card_table" class="table align-middle table-row-dashed fs-6 gy-3 dataTable no-footer">
+                            <thead>
+                                <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
+                                    <th></th>
+                                    <th class="min-w-150px sorting">Name</th>
+                                    <th class="min-w-150px sorting">ID</th>
+                                    <th class="min-w-150px sorting">Rarity</th>
+                                    <th class="min-w-100px sorting">Availability</th>
+                                    <th class="min-w-100px sorting">Price from</th>
+                                </tr>
+                            </thead>
+                            <tbody class="fw-bold text-gray-600">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     <?php } ?>
-  
 </div>
