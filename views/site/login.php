@@ -57,7 +57,7 @@
                             <div class="text-gray-400 fw-semibold fs-4">
                                 New Here?
 
-                                <a href="/oswald-html-free/authentication/sign-up/basic.html" class="link-primary fw-bold">
+                                <a href="/site/signup" class="link-primary fw-bold">
                                     Create an Account
                                 </a>
                             </div>

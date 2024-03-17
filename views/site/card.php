@@ -18,7 +18,7 @@
 
         <!--begin::Item-->
         <li class="breadcrumb-item text-gray-700 fw-bold lh-1">
-            <a href="/" class="text-gray-500 text-hover-primary">
+            <a href="/categories/<?=$cards[0]['category_nr']?>" class="text-gray-500 text-hover-primary">
                 <?= $cards[0]['category_name'] ?>
             </a>
         </li>
